@@ -69,6 +69,8 @@
   <script src="{{ asset('customjs/product-list.js') }}"></script>
 @elseif($page === 'color')
   <script src="{{ asset('customjs/color.js') }}"></script>
+@elseif($page === 'size')
+  <script src="{{ asset('customjs/size.js') }}"></script>
 @endif
 </body>
 </html>

@@ -8,7 +8,7 @@ $(document).ready(function() {
         var formData = new FormData($(this)[0]);
         var productId = $('#product_id').val();
         if (productId) {
-            url = BASE_URL + '/update-color/' + productId;
+            url = BASE_URL + '/update-size/' + productId;
             formData.append('_method', 'PUT');
         }
 
@@ -34,11 +34,13 @@ $(document).ready(function() {
                     showSwal('error', 'Error!', xhr.statusText, 'OK', function() {
                         location.reload();
                     });
-                } else{
+                } else{ alert();
                     $('.text-red-500').remove();
-                    var errors = xhr.responseJSON.errors;
+                    var errors = xhr.responseJSON.errors; console.log(errors);
                     $.each(errors, function(field, messages) {
-                        
+                        console.log(field);
+                        console.log(messages);
+
                             $.each(messages, function(index, message) {
                                 $('#' + field).closest('.form-group').append('<span class="text-red-500 text-danger">' + message + '</span>');
                             });
@@ -53,12 +55,12 @@ $(document).ready(function() {
     });
 
 
-    $('#color-table').on('click', '.edit-btn', function(e) {
+    $('#size-table').on('click', '.edit-size', function(e) {
         e.preventDefault();
-        var colorId = $(this).data('id');
+        var url = $(this).data('url');
         // Make AJAX call to fetch data for the color with the given ID
         $.ajax({
-            url: BASE_URL + '/edit-color/' + colorId, // Adjust the URL accordingly
+            url: url, // Adjust the URL accordingly
             type: 'GET',
             success: function(response) {
                 console.log(response);
@@ -81,10 +83,10 @@ $(document).ready(function() {
 
 
 function initialPageload(params) {
-    var table = $('#color-table').DataTable({
+    var table = $('#size-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: BASE_URL +'/color-lists',
+        ajax: BASE_URL +'/size-lists',
         columns: [
             { data: 'id'},
             { data: 'name'},
@@ -92,8 +94,9 @@ function initialPageload(params) {
                 data: null,
                 render: function(data, type, full, meta) {
                     return '<div class="btn-group" role="group" aria-label="Company Actions">' +
-                               '<a href="' + BASE_URL + '/product/' + full.encriptedId + '/edit" class="btn btn-primary btn-sm edit-btn" data-id="' + full.encriptedId + '">Edit</a>' +
-                               '<button class="btn btn-danger btn-sm delete-btn delete-company" data-url="' + BASE_URL + '/admin/delete-company/' + full.id + '" data-id="' + full.id + '">Delete</button>' +
+                               '<button class="btn btn-primary btn-sm edit-size" data-url="' + BASE_URL + '/edit-size/' + full.encriptedId + '" data-id="' + full.id + '">Edit</button>' +
+
+                               '<button class="btn btn-danger btn-sm delete-btn delete-company" data-url="' + BASE_URL + '/delete-size/' + full.encriptedId + '" data-id="' + full.id + '">Delete</button>' +
                            '</div>';
                 }
             }
