@@ -10,7 +10,8 @@ use App\Traits\FileUploadTrait;
 use App\Traits\ResponseTrait;
 use Yajra\DataTables\Facades\Datatables;
 use Illuminate\Support\Facades\Crypt;
-
+use App\Models\Color;
+use App\Models\Size;
 
 
 class ProductController extends Controller
@@ -22,7 +23,9 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::select('*');
+            // $data = Product::with('colors')->get(); 
+            $data = Product::get();
+            
             return DataTables::of($data)
             ->addColumn('image', function ($product) {
                 $imageUrl = asset('storage/' . $product->product_image);
@@ -37,6 +40,14 @@ class ProductController extends Controller
             ->addColumn('updated_at', function ($product) {
                 return $formattedCreatedAt = $product->updated_at->format('Y-m-d h:i A');
             })
+            ->addColumn('colors', function ($product) {
+                $colors = Color::whereIn('id', $product->color_ids)->pluck('name')->toArray();
+                return implode(', ', $colors);
+            })
+            ->addColumn('sizes', function ($product) {
+                $sizes = Size::whereIn('id', $product->size_ids)->pluck('name')->toArray();
+                return implode(', ', $sizes);
+            })
             ->make(true);
         }
         $page = 'product-list';
@@ -49,8 +60,10 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $colors = Color::get();
+        $sizes = Size::get();
         $page = 'product';
-        return view('product',compact('page'));
+        return view('product',compact('page', 'colors', 'sizes'));
     }
 
     /**
@@ -58,7 +71,6 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        // dd($request->validated());
         try {
             $data = $request->validated();
             // $logoPath = $request->file('company_logo')->store('logos', 'public');
@@ -69,6 +81,8 @@ class ProductController extends Controller
                     'product_title' => $data['product_title'],
                     'product_description' => $data['product_description'],
                     'product_image' => $productImage,
+                    'color_ids' => $data['color_ids'], // Assuming color_ids is sent as an array from the form
+                'size_ids' => $data['size_ids'],
                 ]);
                 $product->save();
 
@@ -96,13 +110,16 @@ class ProductController extends Controller
      */
     public function edit(Product $product, $id)
     {
-        return view('product', ['product' => $product->findOrFail(Crypt::decrypt($id)), 'page' => 'product']);
+        return view('product', ['product' => $product->findOrFail(Crypt::decrypt($id)),
+         'page' => 'product',
+        'colors' => Color::get(),
+        'sizes' => Size::get()]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product, $id)
+    public function update(ProductRequest $request, Product $product, $id)
     {
         try {
             $product = $product->findOrFail(decrypt($id));
@@ -115,6 +132,8 @@ class ProductController extends Controller
 
             $product->product_title = $request->product_title;
             $product->product_description = $request->product_description;
+            $product->color_ids = $request->color_ids;
+            $product->size_ids = $request->size_ids;
             $product->updated_at = now();
             $product->save();
             

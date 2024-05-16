@@ -51,18 +51,37 @@ function initialPagelLoad() {
         processing: true,
         serverSide: true,
         ajax: BASE_URL +'/product-lists',
+        autoWidth: false, // Disable autoWidth to allow custom column widths
+        columnDefs: [
+            { width: '5%', targets: 0 }, // Set width for the first column (ID)
+            { width: '15%', targets: 1 }, // Set width for the second column (Product Title)
+            { width: '20%', targets: 2 }, // Set width for the third column (Product Description)
+            { width: '10%', targets: 3 }, // Set width for the fourth column (Product Image)
+            { width: '20%', targets: 4 }, // Set width for the fifth column (Colors)
+            { width: '30%', targets: 5 } // Set width for the sixth column (Actions)
+        ],
         columns: [
             { data: 'id'},
             { data: 'product_title'},
             { data: 'product_description'},
             { 
-                data: 'product_image', 
+                data: 'image', 
                 name: 'image', 
                 orderable: false, 
                 searchable: false, 
                 render: function(data) {
                     return '<img src="' + data + '" alt="Product Image" style="max-width: 100px; max-height: 100px;">';
                 }
+            },
+            { data: 'colors', 
+              render: function(data, type, full, meta) {
+                  return data; // Return HTML content as it is
+              }
+            },
+            { data: 'sizes', 
+              render: function(data, type, full, meta) {
+                  return data; // Return HTML content as it is
+              }
             },
             { 
                 data: null,

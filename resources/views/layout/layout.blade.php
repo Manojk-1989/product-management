@@ -58,6 +58,10 @@
 <!-- jQuery -->
 <script src="{{ asset('js/jquery-3.3.1.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/select2.full.min.js') }}"></script>
+
+<!-- <script src="../../plugins/select2/js/select2.full.min.js"></script> -->
+
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/sweetalert.js') }}"></script>

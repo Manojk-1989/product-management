@@ -8,6 +8,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Tempusdominus Bootstrap 4 -->
   <link href="{{ asset('css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+
   <!-- Theme style -->
   <link href="{{ asset('css/adminlte.min.css') }}" rel="stylesheet">
   <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">

@@ -20,6 +20,8 @@
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Image</th>
+                                <th>Color</th>
+                                <th>Size</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

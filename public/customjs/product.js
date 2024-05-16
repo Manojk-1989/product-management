@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    $('.select2').select2()
+
     $('#product_image').change(function() {
         var file = this.files[0];
         var reader = new FileReader();
@@ -41,6 +43,11 @@ $(document).ready(function() {
             url = BASE_URL + '/update-product/' + productId;
             formData.append('_method', 'PUT');
         }
+        // var selectedColors = $('[name="color_ids[]"]').val(); // Get selected color values by name attribute
+        // var selectedSizes = $('[name="size_ids[]"]').val();   // Get selected size values by name attribute
+        // formData.append('colors[]', selectedColors);
+        // formData.append('sizes[]', selectedSizes);
+        
 
         $.ajax({
             url: url,

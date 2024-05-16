@@ -38,10 +38,34 @@
                     <img src="" alt="product Logo" id="previewImage" style="max-width: 100px; max-height: 100px;">
                   </div>
                   @if(isset($product) && $product->product_image)
-                  <div class="mt-2" id="imagePreviewAlreadyExist">
-                    <img src="{{ asset('storage/product-mages/' . basename($product->product_image)) }}" alt="product Logo" style="max-width: 100px; max-height: 100px;">
-                  </div>
-                  @endif
+    <div class="mt-2" id="imagePreviewAlreadyExist">
+        <img src="{{ asset('storage/product-images/' . basename($product->product_image)) }}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+    </div>
+@endif
+
+                  <div class="form-group">
+                  <label>Select Color</label>
+                  <select class="select2" multiple="multiple" id="color_ids" name="color_ids[]" data-placeholder="Select a State" style="width: 100%;">
+                    @foreach($colors as $color)
+                      <!-- <option value="{{ $color->id }}">{{ $color->name }}</option> -->
+                      <option value="{{ $color->id }}" {{ (isset($product) && in_array($color->id, $product->color_ids)) ? 'selected' : '' }}>
+                {{ $color->name }}
+            </option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Select Size</label>
+                  <select class="select2" multiple="multiple" id="size_ids" name="size_ids[]" data-placeholder="Select a State" style="width: 100%;">
+                    @foreach($sizes as $size)
+                      <!-- <option value="{{ $size->id }}">{{ $size->name }}</option> -->
+                      <option value="{{ $size->id }}" {{ (isset($product) && in_array($size->id, $product->size_ids)) ? 'selected' : '' }}>
+                {{ $size->name }}
+            </option>
+                    @endforeach
+                  </select>
+                </div>
+                  
                   <input type="" id="product_id" name="product_id" value="{{ isset($product) ? encrypt($product->id)  : '' }}">
                 </div>
                 <div class="card-footer">
