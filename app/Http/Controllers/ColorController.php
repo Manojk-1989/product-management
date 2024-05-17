@@ -9,6 +9,7 @@ use App\Http\Requests\ColorRequest;
 use App\Traits\ResponseTrait;
 use Yajra\DataTables\Facades\Datatables;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Product;
 
 
 
@@ -80,16 +81,37 @@ class ColorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Color $color)
+    public function update(ColorRequest $request, Color $color, $id)
     {
-        //
+        try {
+
+            $data = $request->validated();
+            $color = $color->findOrFail($id);
+            $color->name = $data['edit_name'];
+            $color->updated_at = now();
+            $color->save();
+            
+            return $this->sendSuccessResponse('Product updated successfully');
+        } catch (\Throwable $th) {dd($th);
+            return $this->sendErrorResponse('Something went wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Color $color)
+    public function destroy(Color $color, $id)
     {
-        //
+        try {
+            $products = Product::whereJsonContains('color_ids', $id)->get();
+            if ($products->isEmpty()) {
+                Color::where('id', $id)->delete();
+                return $this->sendSuccessResponse('Color deleted successfully');
+            }
+            return $this->sendErrorResponse('Color associated with a product');
+        } catch (\Throwable $th) {
+            return $this->sendErrorResponse('Something went wrong');
+        }
+        
     }
 }

@@ -28,6 +28,8 @@ Route::post('/product', [ProductController::class, 'store'])->name('product.stor
 Route::get('/product/{encriptedId}/edit', [ProductController::class, 'edit'])->name('product.edit');
 Route::delete('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::get('/view-product/{id}', [ProductController::class, 'show'])->name('product.show');
+
 
 
 Route::get('/color', [ColorController::class, 'create'])->name('color.create');

@@ -9,6 +9,7 @@ use App\Http\Requests\SizeRequest;
 use App\Traits\ResponseTrait;
 use Yajra\DataTables\Facades\Datatables;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Product;
 
 
 class SizeController extends Controller
@@ -76,16 +77,37 @@ class SizeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Size $size)
+    public function update(SizeRequest $request, Size $size, $id)
     {
-        //
+        try {
+
+            $data = $request->validated();
+            $size = $size->findOrFail($id);
+            $size->name = $data['edit_name'];
+            $size->updated_at = now();
+            $size->save();
+            
+            return $this->sendSuccessResponse('Size updated successfully');
+        } catch (\Throwable $th) {dd($th);
+            return $this->sendErrorResponse('Something went wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Size $size)
+    public function destroy(Size $size, $id)
     {
-        //
+        try {
+            $products = Product::whereJsonContains('size_ids', $id)->get();
+
+            if ($products->isEmpty()) {
+                Size::where('id', $id)->delete();
+                return $this->sendSuccessResponse('Size deleted successfully');
+            }
+            return $this->sendErrorResponse('Size associated with a product');
+        } catch (\Throwable $th) {dd($th);
+            return $this->sendErrorResponse('Something went wrong');
+        }
     }
 }

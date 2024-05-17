@@ -22,6 +22,8 @@
                                 <th>Image</th>
                                 <th>Color</th>
                                 <th>Size</th>
+                                <th>View</th>
+
                                 <th>Action</th>
                             </tr>
                         </thead>

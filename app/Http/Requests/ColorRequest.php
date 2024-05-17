@@ -21,8 +21,15 @@ class ColorRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|unique:colors|string|min:3',
-        ];
+        if ($this->isMethod('PUT')) {
+            return [
+                'edit_name' => 'required|string|min:3',
+            ];
+        } else {
+            return [
+                'name' => 'required|unique:colors|string|min:3',
+            ];
+        }
+        
     }
 }

@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\Datatables;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Color;
 use App\Models\Size;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -100,9 +100,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Product $product, $id)
     {
-        //
+        // dd($product);
+        $product = $product->findOrFail(Crypt::decrypt($id));
+        $colors = Color::whereIn('id', $product->color_ids)->pluck('name')->toArray();
+        $sizes = Size::whereIn('id', $product->size_ids)->pluck('name')->toArray();
+
+        // dd($colors);
+        return view('product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details']);
     }
 
     /**
@@ -122,23 +128,26 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product, $id)
     {
         try {
-            $product = $product->findOrFail(decrypt($id));
 
+            $data = $request->validated();
+            
+            $product = $product->findOrFail(decrypt($id));
+            // dd($product);
             if ($request->hasFile('product_image')) {
-                Storage::disk('public')->delete($product->company_logo);
+                Storage::disk('public')->delete($product->product_image);
                 $productImage = $this->imageUpload($request->file('product_image'), 'product-images');
                 $product->product_image = $productImage;
             }
 
-            $product->product_title = $request->product_title;
-            $product->product_description = $request->product_description;
-            $product->color_ids = $request->color_ids;
-            $product->size_ids = $request->size_ids;
+            $product->product_title = $data['product_title'];
+            $product->product_description = $data['product_description'];
+            $product->color_ids = $data['color_ids'];
+            $product->size_ids = $data['size_ids'];
             $product->updated_at = now();
             $product->save();
             
             return $this->sendSuccessResponse('Product updated successfully');
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {dd($th);
             return $this->sendErrorResponse('Something went wrong');
         }
     }
@@ -146,8 +155,18 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, $id)
     {
-        //
+        try {
+            $product = $product->findOrFail(decrypt($id));
+            if ($product->product_image) {
+                Storage::disk('public')->delete($product->product_image);
+            }
+            
+            $product->delete();
+            return $this->sendSuccessResponse('Product deleted successfully');
+        } catch (\Throwable $th) {
+            return $this->sendErrorResponse('Something went wrong');
+        }
     }
 }

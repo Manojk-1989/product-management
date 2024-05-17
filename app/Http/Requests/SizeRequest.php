@@ -21,8 +21,15 @@ class SizeRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|unique:sizes|string|min:3',
-        ];
+        if ($this->isMethod('PUT')) {
+            return [
+                'edit_name' => 'required|string|min:3',
+            ];
+        } else {
+            return [
+                'name' => 'required|unique:sizes|string|min:3',
+            ];
+        }
+        
     }
 }
