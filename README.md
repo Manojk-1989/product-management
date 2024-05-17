@@ -112,7 +112,7 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-For any inquiries, please contact [your-email@example.com](mailto:manojkumarka99@gmail.com).
+For any inquiries, please contact [manojkumarka99@gmail.com](mailto:manojkumarka99@gmail.com).
 
 ```
 
