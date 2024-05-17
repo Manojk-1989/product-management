@@ -23,9 +23,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // $data = Product::with('colors')->get(); 
             $data = Product::get();
-            
             return DataTables::of($data)
             ->addColumn('image', function ($product) {
                 $imageUrl = asset('storage/' . $product->product_image);
@@ -73,7 +71,10 @@ class ProductController extends Controller
     {
         try {
             $data = $request->validated();
-            // $logoPath = $request->file('company_logo')->store('logos', 'public');
+
+            // Upload the product image file obtained from the request
+            // The image is uploaded to this path storage/app/public/product-images 
+            // imageUpload method, passing the file and the destination directory as arguments
             $productImage = $this->imageUpload($request->file('product_image'), 'product-images');
 
             if ($productImage) {
@@ -81,15 +82,13 @@ class ProductController extends Controller
                     'product_title' => $data['product_title'],
                     'product_description' => $data['product_description'],
                     'product_image' => $productImage,
-                    'color_ids' => $data['color_ids'], // Assuming color_ids is sent as an array from the form
-                'size_ids' => $data['size_ids'],
+                    'color_ids' => $data['color_ids'], 
+                    'size_ids' => $data['size_ids'],
                 ]);
                 $product->save();
 
                 return $this->sendCreatedResponse('Product created successfully');
             }
-
-            
 
             return $this->sendErrorResponse('Product image upload failed');
         } catch (\Throwable $th) {dd($th);
@@ -102,12 +101,10 @@ class ProductController extends Controller
      */
     public function show(Product $product, $id)
     {
-        // dd($product);
         $product = $product->findOrFail(Crypt::decrypt($id));
         $colors = Color::whereIn('id', $product->color_ids)->pluck('name')->toArray();
         $sizes = Size::whereIn('id', $product->size_ids)->pluck('name')->toArray();
 
-        // dd($colors);
         return view('product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details']);
     }
 
@@ -132,10 +129,18 @@ class ProductController extends Controller
             $data = $request->validated();
             
             $product = $product->findOrFail(decrypt($id));
-            // dd($product);
+            
+            // Checks if a product image file exist in the request
+            // If exist delete the existing product image from the directory and replace it with the new one
+            // Uploads the new product image file using imageUpload method
+            // Assign the new product image path to the product model
+
             if ($request->hasFile('product_image')) {
                 Storage::disk('public')->delete($product->product_image);
                 $productImage = $this->imageUpload($request->file('product_image'), 'product-images');
+                if (!$productImage) {
+                    return $this->sendErrorResponse('Product image upload failed');
+                }
                 $product->product_image = $productImage;
             }
 
@@ -147,7 +152,7 @@ class ProductController extends Controller
             $product->save();
             
             return $this->sendSuccessResponse('Product updated successfully');
-        } catch (\Throwable $th) {dd($th);
+        } catch (\Throwable $th) {
             return $this->sendErrorResponse('Something went wrong');
         }
     }

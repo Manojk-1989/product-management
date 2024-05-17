@@ -14,7 +14,7 @@ trait FileUploadTrait
         try {
             return $image->store($folderName, 'public');
         } catch (\Throwable $th) {
-            return 'File upload Error';
+            return false;
         }
         
     }
