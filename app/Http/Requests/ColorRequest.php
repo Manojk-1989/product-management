@@ -32,4 +32,11 @@ class ColorRequest extends FormRequest
         }
         
     }
+
+    public function messages()
+    {
+        return [
+            'edit_name.required' => 'The name field is required.', 
+        ];
+    }
 }

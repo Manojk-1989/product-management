@@ -13,26 +13,6 @@ $(document).ready(function() {
         reader.readAsDataURL(file);
     });
 
-    $('#annual_turnover').on('keypress', function(event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            event.preventDefault();
-        } else {
-            var input = $(this).val();
-            if (charCode == 46 && input.indexOf('.') !== -1) {
-                event.preventDefault();
-            }
-        }
-    });
-
-    $('#company_contact_number').on('input', function() {
-        var maxLength = 10;
-        if ($(this).val().length > maxLength) {
-            $(this).val($(this).val().slice(0, maxLength));
-        }
-    });
-
-    
     
     $('#product_form').submit(function(event) {
         event.preventDefault();
@@ -43,11 +23,6 @@ $(document).ready(function() {
             url = BASE_URL + '/update-product/' + productId;
             formData.append('_method', 'PUT');
         }
-        // var selectedColors = $('[name="color_ids[]"]').val(); // Get selected color values by name attribute
-        // var selectedSizes = $('[name="size_ids[]"]').val();   // Get selected size values by name attribute
-        // formData.append('colors[]', selectedColors);
-        // formData.append('sizes[]', selectedSizes);
-        
 
         $.ajax({
             url: url,

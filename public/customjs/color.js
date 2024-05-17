@@ -6,11 +6,6 @@ $(document).ready(function() {
         event.preventDefault();
         var url = $(this).data('url');
         var formData = new FormData($(this)[0]);
-        var productId = $('#product_id').val();
-        if (productId) {
-            url = BASE_URL + '/update-color/' + productId;
-            formData.append('_method', 'PUT');
-        }
 
         $.ajax({
             url: url,
@@ -54,9 +49,6 @@ $(document).ready(function() {
 
     $('#update_btn').click(function(event) {
         event.preventDefault();
-        // var data = {
-        //     edit_name: $('#edit_name').val()
-        // };
     
         $.ajax({
             url: BASE_URL +'/update-color/'+ $('#edit_id').val(),
@@ -92,9 +84,6 @@ $(document).ready(function() {
                     });
                 }
             },
-            // cache: false,
-            // contentType: false,
-            // processData: false
         });
     });
     
@@ -102,26 +91,16 @@ $(document).ready(function() {
 
     $('#color-table').on('click', '.edit-btn', function(e) {
         e.preventDefault();
-        var colorId = $(this).data('id');
-        // Make AJAX call to fetch data for the color with the given ID
         $.ajax({
-            url: BASE_URL + '/edit-color/' + colorId, // Adjust the URL accordingly
+            url: BASE_URL + '/edit-color/' + $(this).data('id'), 
             type: 'GET',
             success: function(response) {
-                console.log(response);
-                console.log(response.data.name);
-
-                // Assuming response contains data for the color
-                // Display the data in a modal window
-                // Example:
                 $('#edit-modal').modal('show');
-                // Populate modal fields with response data
+                $('.modal-title').text('Edit Color');
                 $('#edit_name').val(response.data.name);
                 $('#edit_id').val(response.data.id);
-
             },
             error: function(xhr, status, error) {
-                // Handle error
                 console.error(error);
             }
         });

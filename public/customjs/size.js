@@ -58,25 +58,16 @@ $(document).ready(function() {
     $('#size-table').on('click', '.edit-size', function(e) {
         e.preventDefault();
         var url = $(this).data('url');
-        // Make AJAX call to fetch data for the color with the given ID
         $.ajax({
-            url: url, // Adjust the URL accordingly
+            url: url,
             type: 'GET',
             success: function(response) {
-                console.log(response);
-                console.log(response.data.name);
-
-                // Assuming response contains data for the color
-                // Display the data in a modal window
-                // Example:
                 $('#edit-modal').modal('show');
-                // Populate modal fields with response data
+                $('.modal-title').text('Edit Size');
                 $('#edit_name').val(response.data.name);
                 $('#edit_id').val(response.data.id);
-
             },
             error: function(xhr, status, error) {
-                // Handle error
                 console.error(error);
             }
         });
@@ -85,10 +76,6 @@ $(document).ready(function() {
 
     $('#update_btn').click(function(event) {
         event.preventDefault();
-        // var data = {
-        //     edit_name: $('#edit_name').val()
-        // };
-    
         $.ajax({
             url: BASE_URL +'/update-size/'+ $('#edit_id').val(),
             type: 'PUT',
@@ -123,9 +110,6 @@ $(document).ready(function() {
                     });
                 }
             },
-            // cache: false,
-            // contentType: false,
-            // processData: false
         });
     });
 });
@@ -186,7 +170,6 @@ function initialPageload(params) {
                 render: function(data, type, full, meta) {
                     return '<div class="btn-group" role="group" aria-label="Company Actions">' +
                                '<button class="btn btn-primary btn-sm edit-size" data-url="' + BASE_URL + '/edit-size/' + full.encriptedId + '" data-id="' + full.id + '">Edit</button>' +
-
                                '<button class="btn btn-danger btn-sm delete-btn delete-size" data-url="' + BASE_URL + '/delete-size/' + full.id + '" data-id="' + full.id + '">Delete</button>' +
                            '</div>';
                 }
