@@ -49,7 +49,8 @@ class ProductController extends Controller
             ->make(true);
         }
         $page = 'product-list';
-        return view('product-list', compact('page')); 
+        $pageTitle = 'Product List';
+        return view('product-list', compact('page', 'pageTitle')); 
         
     }
 
@@ -61,7 +62,8 @@ class ProductController extends Controller
         $colors = Color::get();
         $sizes = Size::get();
         $page = 'product';
-        return view('product',compact('page', 'colors', 'sizes'));
+        $pageTitle = 'Add New Product';
+        return view('product',compact('page', 'colors', 'sizes', 'pageTitle'));
     }
 
     /**
@@ -105,7 +107,7 @@ class ProductController extends Controller
         $colors = Color::whereIn('id', $product->color_ids)->pluck('name')->toArray();
         $sizes = Size::whereIn('id', $product->size_ids)->pluck('name')->toArray();
 
-        return view('product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details']);
+        return view('product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details', 'pageTitle' => 'Product Details',]);
     }
 
     /**
@@ -114,7 +116,7 @@ class ProductController extends Controller
     public function edit(Product $product, $id)
     {
         return view('product', ['product' => $product->findOrFail(Crypt::decrypt($id)),
-         'page' => 'product',
+         'page' => 'product', 'pageTitle' => 'Edit Product',
         'colors' => Color::get(),
         'sizes' => Size::get()]);
     }

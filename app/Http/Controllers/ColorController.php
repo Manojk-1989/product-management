@@ -41,7 +41,8 @@ class ColorController extends Controller
     public function create()
     {
         $page = 'color';
-        return view('color', compact('page'));
+        $pageTitle = 'Add Color';
+        return view('color', compact('page', 'pageTitle'));
     }
 
     /**
