@@ -93,7 +93,7 @@ class ProductController extends Controller
             }
 
             return $this->sendErrorResponse('Product image upload failed');
-        } catch (\Throwable $th) {dd($th);
+        } catch (\Throwable $th) {
             return $this->sendErrorResponse('Something went wrong');
         }
     }

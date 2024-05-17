@@ -55,7 +55,7 @@ class ColorController extends Controller
             $color->save();
             return $this->sendCreatedResponse('Color added successfully');
 
-        } catch (\Throwable $th) {dd($th);
+        } catch (\Throwable $th) {
             return $this->sendErrorResponse('Something went wrong');
         }
         
@@ -74,7 +74,6 @@ class ColorController extends Controller
      */
     public function edit(Color $color, $id)
     {
-        // dd($color);
         return $this->sendJsonResponse($color->findOrFail(Crypt::decrypt($id))->toArray(), 200, 'Retrieved successfully');
 
     }
