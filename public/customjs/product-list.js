@@ -74,18 +74,20 @@ function initialPagelLoad() {
                   return data;
               }
             },
+            { data: 'created_at'},
+            { data: 'updated_at'},
             { 
                 data: null,
                 render: function(data, type, full, meta) {
-                    return '<div class="btn-group" role="group" aria-label="Company Actions">' +
-                               '<a href="' + BASE_URL + '/view-product/' + full.encriptedId + '" class="btn btn-primary btn-sm edit-btn">View</a>' +
+                    return '<div class="btn-group" role="group" >' +
+                               '<a href="' + BASE_URL + '/view-product/' + full.encriptedId + '" class="btn btn-success btn-sm edit-btn">View</a>' +
                            '</div>';
                 }
             },
             { 
                 data: null,
                 render: function(data, type, full, meta) {
-                    return '<div class="btn-group" role="group" aria-label="Company Actions">' +
+                    return '<div class="btn-group" role="group" >' +
                                '<a href="' + BASE_URL + '/product/' + full.encriptedId + '/edit" class="btn btn-primary btn-sm edit-btn">Edit</a>' +
                                '<button class="btn btn-danger btn-sm delete-btn delete-product" data-url="' + BASE_URL + '/delete-product/' + full.encriptedId + '">Delete</button>' +
                            '</div>';

@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SizeController;
+use App\Models\Color;
+use App\Models\Size;
+
 
 
 /*
@@ -18,12 +21,13 @@ use App\Http\Controllers\SizeController;
 */
 
 Route::get('/', function () {
-    $page = 'color';
-    $pageTitle = 'Add Color';
-    return view('pages.color',compact('page', 'pageTitle'));
+    $colors = Color::get();
+    $sizes = Size::get();
+    $page = 'product';
+    $pageTitle = 'Add Product';
+    return view('pages.product',compact('page', 'pageTitle', 'colors', 'sizes'));
 });
 
-// Route::group(['middleware' => 'admin'], function () {
 Route::get('/product', [ProductController::class, 'create'])->name('product.create');
 Route::get('/product-lists', [ProductController::class, 'index'])->name('product.index');
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
@@ -52,4 +56,3 @@ Route::put('/update-size/{id}', [SizeController::class, 'update'])->name('size.u
 
 
 
-// Route::post('/admin/logout', [AuthController::class, 'logout'])->name('logout');
