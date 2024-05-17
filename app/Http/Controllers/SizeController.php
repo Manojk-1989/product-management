@@ -41,7 +41,7 @@ class SizeController extends Controller
     {
         $page = 'size';
         $pageTitle = 'Add Size';
-        return view('size', compact('page', 'pageTitle'));
+        return view('pages.size', compact('page', 'pageTitle'));
     }
 
     /**

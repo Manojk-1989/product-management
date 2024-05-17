@@ -50,7 +50,7 @@ class ProductController extends Controller
         }
         $page = 'product-list';
         $pageTitle = 'Product List';
-        return view('product-list', compact('page', 'pageTitle')); 
+        return view('pages.product-list', compact('page', 'pageTitle')); 
         
     }
 
@@ -63,7 +63,7 @@ class ProductController extends Controller
         $sizes = Size::get();
         $page = 'product';
         $pageTitle = 'Add New Product';
-        return view('product',compact('page', 'colors', 'sizes', 'pageTitle'));
+        return view('pages.product',compact('page', 'colors', 'sizes', 'pageTitle'));
     }
 
     /**
@@ -107,7 +107,7 @@ class ProductController extends Controller
         $colors = Color::whereIn('id', $product->color_ids)->pluck('name')->toArray();
         $sizes = Size::whereIn('id', $product->size_ids)->pluck('name')->toArray();
 
-        return view('product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details', 'pageTitle' => 'Product Details',]);
+        return view('pages.product-details',['product' => $product,'colors' => $colors, 'sizes' => $sizes, 'page'=>'product-details', 'pageTitle' => 'Product Details',]);
     }
 
     /**
@@ -115,7 +115,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product, $id)
     {
-        return view('product', ['product' => $product->findOrFail(Crypt::decrypt($id)),
+        return view('pages.product', ['product' => $product->findOrFail(Crypt::decrypt($id)),
          'page' => 'product', 'pageTitle' => 'Edit Product',
         'colors' => Color::get(),
         'sizes' => Size::get()]);

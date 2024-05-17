@@ -18,7 +18,9 @@ use App\Http\Controllers\SizeController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $page = 'color';
+    $pageTitle = 'Add Color';
+    return view('pages.color',compact('page', 'pageTitle'));
 });
 
 // Route::group(['middleware' => 'admin'], function () {
